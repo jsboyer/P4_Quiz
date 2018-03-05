@@ -100,11 +100,13 @@ exports.testCmd = (rl, id) => {
 						log (' ');
 						log ('Su respuesta es');
 						figlog ('CORRECTA', 'green');
+						log ('Efectivamente, la respuesta es correcta.');
 						rl.prompt(); 
 					} else {
 						log (' ');
 						log ('Su respuesta es');
 						figlog ('INCORRECTA', 'red');
+						log ('Efectivamente, la respuesta es incorrecta.');
 						rl.prompt(); 	
 					}
 			});
@@ -141,6 +143,7 @@ exports.playCmd = rl => {
  			log('No está mal.');
  			log(' ');
  			figlog('GAME OVER', 'green');
+ 			log ('Aquí pone Fin');
  			rl.prompt();
  		} else {
  			//let id = azar (metodo math.random() y quitarla del array;
@@ -163,6 +166,8 @@ exports.playCmd = rl => {
 							log (' ');
 							log ('Su respuesta es');
 							figlog ('CORRECTA', 'green');
+
+							log ('Efectivamente, la respuesta es correcta.');
 							//subo score +1
 							score += 1;
 							var index = toBeResolved.indexOf(id);
@@ -175,10 +180,12 @@ exports.playCmd = rl => {
 							log (' ');
 							log ('Su respuesta es');
 							figlog ('INCORRECTA', 'red');
+							log ('Efectivamente, la respuesta es incorrecta.');
 							// resultados
 							log(` Acertaste ${colorea (score, 'green')} preguntas.`);
 							log(' ');
  							figlog('GAME OVER', 'red');
+ 							log ('Aquí pone Fin');
 							//termina el juego
 							rl.prompt(); 	
 						}
@@ -195,6 +202,7 @@ exports.playCmd = rl => {
 exports.creditsCmd = rl => {
     log('Mira quién hizo esto:');
     log('Javier Sánchez-Blanco Boyer');
+    log('aka jsboyer');
     rl.prompt();
 };
 
