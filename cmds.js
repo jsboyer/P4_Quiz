@@ -404,7 +404,7 @@ exports.playCmd = rl => {
 	}
 	playOne();
 */
-	Sequelize.count()
+	/*Sequelize.count()
 	.then( quiz => {
 		for (i=0; i<Sequelize.count(); i++) {
  		//const ide = model.getByIndex(i);
@@ -423,7 +423,7 @@ exports.playCmd = rl => {
 	.catch(error => {
 		errorlog(error.message);
 		rl.prompt();
-	})
+	}) */
 
 };
 
