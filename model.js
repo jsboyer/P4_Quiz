@@ -10,7 +10,7 @@ sequelize.define('quiz', {
 	},
 	answer: {
 		type: Sequelize.STRING,
-		validate: {notEmpty: {msg: "La pregunta no puede estar vacía como tu corazón"}}
+		validate: {notEmpty: {msg: "La respuesta no puede estar vacía como tu corazón"}}
 	}
 });
 

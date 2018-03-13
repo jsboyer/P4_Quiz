@@ -53,6 +53,24 @@ const validateId = id => {
 	});
 };
 
+const makeQuestion = (rl, text) => {
+	return new Sequelize.Promise((resolve, reject) => {
+		rl.question(colorea(text, 'red'), answer => {
+			resolve(answer.trim());
+		});
+	});
+};
+
+const idGenerator = (max) => {
+	//return new Sequelize.Promise(() => {
+		log('LLEGO');
+		log(max);
+		let idrandom = (Math.floor( Math.random() * (max-1) ) +1 );
+		log(idrandom);
+		return idrandom;
+	//});
+};
+
 exports.showCmd = (rl, id) => {
 	log('Aquí está el quiz que has pedido:');
 	validateId(id)
@@ -71,13 +89,6 @@ exports.showCmd = (rl, id) => {
 	});
 };
 
-const makeQuestion = (rl, text) => {
-	return new Sequelize.Promise((resolve, reject) => {
-		rl.question(colorea(text, 'red'), answer => {
-			resolve(answer.trim());
-		});
-	});
-};
 
 exports.addCmd = rl => {
 	log('Añade un quiz nuevo:');
@@ -252,72 +263,7 @@ exports.testCmd = (rl, id) => {
 
 
 };
-
- 	const playOne = () => {
- 		log( ' ' );
- 		log( `toBeResolved:  ${toBeResolved}`);
- 		if (toBeResolved.length === 0) {
- 			//mensaje : no queda nada que preguntar
- 			log('No queda nada por preguntar');
- 			//resultados (lo que hay en la variable score)
- 			log(' Has conseguido');
- 			figlog(`${score} puntos. `);
- 			log('No está mal.');
- 			log(' ');
- 			figlog('GAME OVER', 'green');
- 			log ('Aquí pone Fin');
- 			rl.prompt();
- 		} else {
- 			//let id = azar (metodo math.random() y quitarla del array;
- 			//let id = Math.round(model.count*Math.random);
- 			//while ( (typeof id === "undefined")|| (toBeResolved.includes(id) === false) ) {
- 			//	let id = idGenerator();
- 			//};
-
- 			try {
- 				do {
- 					var id = idGenerator();
- 					log( `id generado:  ${id}`);
- 				} while ( (typeof id === "undefined") || (toBeResolved.includes(id) === false) );
- 				//while ( (typeof id === "undefined") || (toBeResolved.includes(id) === false) ) {
- 				//	let id = idGenerator();
- 				//};
-				const quiz = model.getByIndex(id);
-				rl.question(` ${colorea(quiz.question, 'cyanBright')}:   `, resp => {
-						if (resp.toLowerCase().trim() === quiz.answer.toLowerCase().trim()) {
-							log (' ');
-							log ('Su respuesta es');
-							figlog ('CORRECTA', 'green');
-
-							log ('Efectivamente, la respuesta es correcta.');
-							//subo score +1
-							score += 1;
-							var index = toBeResolved.indexOf(id);
-							toBeResolved.splice(index, 1);
-							// Mensaje : llevas acertadas nosecuantos
-							log(` Llevas acertadas ${colorea (score, 'green')} preguntas. Sigue así.`);
-							//tengo que volver a preguntar. Un bucle llamada recursiva a playOne() para que vuelva a empezar
-							playOne();
-						} else {
-							log (' ');
-							log ('Su respuesta es');
-							figlog ('INCORRECTA', 'red');
-							log ('Efectivamente, la respuesta es incorrecta.');
-							// resultados
-							log(` Acertaste ${colorea (score, 'green')} preguntas.`);
-							log(' ');
- 							figlog('GAME OVER', 'red');
- 							log ('Aquí pone Fin');
-							//termina el juego
-							rl.prompt(); 	
-						}
-				});
-			} catch(error) {
-				errorlog(error.message);
-				rl.prompt();
-			}
-		}
-	}
+	
 
 exports.playCmd = rl => {
 
@@ -404,26 +350,233 @@ exports.playCmd = rl => {
 	}
 	playOne();
 */
-	/*Sequelize.count()
-	.then( quiz => {
-		for (i=0; i<Sequelize.count(); i++) {
- 		//const ide = model.getByIndex(i);
- 		toBeResolved.push(i);
- 	};
- 	const idGenerator = () => {
- 		//let idrandom = Math.round(model.count*Math.random());
- 		let idrandom = Math.floor(( Math.random() * Sequelize.count()) );
- 		return idrandom;
- 	};
+/*
+	let score = 0;
+ 	let toBeResolved = []; // ids de todas las preguntas que existen
+ 	//log( `toBeResolved:  ${toBeResolved}`);
+ 	let mx = 0;
 
-	})
-	.then(quiz => {
-		playOne();
+ 	const playOne = () => {
+ 		log( ' ' );
+ 		log( `toBeResolved:  ${toBeResolved}`);
+ 		if (toBeResolved.length === 0) {
+ 			//mensaje : no queda nada que preguntar
+ 			log('No queda nada por preguntar');
+ 			//resultados (lo que hay en la variable score)
+ 			log(' Has conseguido');
+ 			figlog(`${score} puntos. `);
+ 			log('No está mal.');
+ 			log(' ');
+ 			figlog('GAME OVER', 'green');
+ 			log ('Aquí pone Fin');
+ 			rl.prompt();
+ 		} else {
+ 			try {
+ 				do {
+ 					var id = idGenerator(mx);
+ 					log( `id generado:  ${id}`);
+ 				} while ( (typeof id === "undefined") || (toBeResolved.includes(id) === false) );
+ 	
+				const quiz = models.quiz.findById(id);
+				rl.question(` ${colorea(quiz.question, 'cyanBright')}:   `, resp => {
+						if (resp.toLowerCase().trim() === quiz.answer.toLowerCase().trim()) {
+							log (' ');
+							log ('Su respuesta es');
+							figlog ('CORRECTA', 'green');
+
+							log ('Efectivamente, la respuesta es correcta.');
+							//subo score +1
+							score += 1;
+							var index = toBeResolved.indexOf(id);
+							toBeResolved.splice(index, 1);
+							// Mensaje : llevas acertadas nosecuantos
+							log(` Llevas acertadas ${colorea (score, 'green')} preguntas. Sigue así.`);
+							//tengo que volver a preguntar. Un bucle llamada recursiva a playOne() para que vuelva a empezar
+							playOne();
+						} else {
+							log (' ');
+							log ('Su respuesta es');
+							figlog ('INCORRECTA', 'red');
+							log ('Efectivamente, la respuesta es incorrecta.');
+							// resultados
+							log(` Acertaste ${colorea (score, 'green')} preguntas.`);
+							log(' ');
+ 							figlog('GAME OVER', 'red');
+ 							log ('Aquí pone Fin');
+							//termina el juego
+							rl.prompt(); 	
+						}
+				});
+			} catch(error) {
+				errorlog(error.message);
+				rl.prompt();
+			}
+		}
+	}
+
+ 	models.quiz.findAll()
+	.each(quiz => {
+		//log( `quiz.id:  ${quiz.id}`);
+		toBeResolved.push(quiz.id);
 	})
 	.catch(error => {
 		errorlog(error.message);
-		rl.prompt();
+	})
+	.then(quiz => {
+		 	//log( `toBeResolved tras push:  ${toBeResolved}`);
+			mx = toBeResolved[toBeResolved.length - 1];
+
+			//log( `toBeResolved tras push:  ${toBeResolved}`);
+			//log( `toBeResolved length:  ${toBeResolved.length}`);
+			//log( `toBeResolved[6]:  ${toBeResolved[6]}`);
+			//log( `toBeResolved[toBeResolved.length - 1 ]:  ${toBeResolved[toBeResolved.length - 1]}`);
+			log( `mx:  ${mx}`);
+			return mx;
+	})
+	.then(quiz =>{
+		id = idGenerator(mx);
+	 	log(`id tras generate:  ${id}`);
+	 	models.quiz.findById(id);
+	 })
+	.then(quiz => {
+		playOne();
 	}) */
+
+	let score = 0;
+ 	let toBeResolved = []; // ids de todas las preguntas que existen
+/* 	let nquizzes = quizzes.length;
+
+ 	for (i=0; i<nquizzes; i++) {
+ 		toBeResolved.push(i);
+ 	};
+*/
+ 	
+ /*		models.quiz.findAll()
+			.then(quizzes => {
+				toBeResolved = quizzes;
+			 	const playOne = () => {
+
+			 		const idGenerator = () => {
+ 						//let idrandom = Math.round(model.count*Math.random());
+ 						let idrandom = Math.floor(( Math.random() * toBeResolved[toBeResolved.length - 1]) );
+ 						return idrandom;
+ 					};
+
+			 		log( ' ' );
+			 		log( `toBeResolved:  ${toBeResolved}`);
+			 		if (toBeResolved.length === 0) {
+			 			//mensaje : no queda nada que preguntar
+			 			log('No queda nada por preguntar');
+			 			//resultados (lo que hay en la variable score)
+			 			log(' Has conseguido');
+			 			figlog(`${score} puntos. `);
+			 			log('No está mal.');
+			 			log(' ');
+			 			figlog('GAME OVER', 'green');
+			 			log ('Aquí pone Fin');
+			 			rl.prompt();
+			 		} else {
+			 			//let id = azar (metodo math.random() y quitarla del array;
+			 			//let id = Math.round(model.count*Math.random);
+			 			//while ( (typeof id === "undefined")|| (toBeResolved.includes(id) === false) ) {
+			 			//	let id = idGenerator();
+			 				do {
+			 					var id = idGenerator();
+			 					log( `id generado:  ${id}`);
+			 				} while ( (typeof id === "undefined") || (toBeResolved.includes(id) === false) );
+			 				//while ( (typeof id === "undefined") || (toBeResolved.includes(id) === false) ) {
+			 				//	let id = idGenerator();
+			 				//};
+							const quiz = model.getByIndex(id);
+							rl.question(` ${colorea(quiz.question, 'cyanBright')}:   `, resp => {
+									if (resp.toLowerCase().trim() === quiz.answer.toLowerCase().trim()) {
+										log (' ');
+										log ('Su respuesta es');
+										figlog ('CORRECTA', 'green');
+
+										log ('Efectivamente, la respuesta es correcta.');
+										//subo score +1
+										score += 1;
+										var index = toBeResolved.indexOf(id);
+										toBeResolved.splice(index, 1);
+										// Mensaje : llevas acertadas nosecuantos
+										log(` Llevas acertadas ${colorea (score, 'green')} preguntas. Sigue así.`);
+										//tengo que volver a preguntar. Un bucle llamada recursiva a playOne() para que vuelva a empezar
+										playOne();
+									} else {
+										log (' ');
+										log ('Su respuesta es');
+										figlog ('INCORRECTA', 'red');
+										log ('Efectivamente, la respuesta es incorrecta.');
+										// resultados
+										log(` Acertaste ${colorea (score, 'green')} preguntas.`);
+										log(' ');
+			 							figlog('GAME OVER', 'red');
+			 							log ('Aquí pone Fin');
+										//termina el juego
+										rl.prompt(); 	
+									}
+							});
+						}
+				}
+				playOne();
+			})
+			.catch(error => {
+				errorlog(error.message);
+				rl.prompt();
+			});
+*/
+models.quiz.findAll()
+        .then(quizzes => {
+            toBeResolved = quizzes;
+            const playOne = function () {
+                if(toBeResolved == 0){
+                    //mensaje : no queda nada que preguntar
+			 			log('No queda nada por preguntar');
+			 			//resultados (lo que hay en la variable score)
+			 			log(' Has conseguido');
+			 			figlog(`${score} puntos. `);
+			 			log('No está mal.');
+			 			log(' ');
+			 			figlog('GAME OVER', 'green');
+			 			log ('Aquí pone Fin');
+			 			rl.prompt();
+			 			return;
+                }
+                let id = Math.floor(( Math.random() * toBeResolved.length) );
+                let quiz = toBeResolved[id];
+
+                rl.question(` ${colorea(quiz.question, 'cyanBright')}:   `, (answer)=> {
+                    if(0==answer.toUpperCase().trim().localeCompare(quiz.answer.toUpperCase().trim())){
+                        score++;
+                        log (' ');
+						log ('Su respuesta es');
+						figlog ('CORRECTA', 'green');
+						log ('Efectivamente, la respuesta es correcta.');
+                        toBeResolved.splice(id,1);
+                        log(` Llevas acertadas ${colorea (score, 'green')} preguntas. Sigue así.`);
+                        playOne();
+                    }else{
+                        log (' ');
+						log ('Su respuesta es');
+						figlog ('INCORRECTA', 'red');
+						log ('Efectivamente, la respuesta es incorrecta.');
+						// resultados
+						log(` Acertaste ${colorea (score, 'green')} preguntas.`);
+						log(' ');
+			 			figlog('GAME OVER', 'red');
+			 			log ('Aquí pone Fin');
+						//termina el juego
+						rl.prompt();
+                    }
+                });
+            };
+            playOne();
+        })
+        .catch(error => {
+           errorlog(error);
+            rl.prompt();
+        });
 
 };
 
