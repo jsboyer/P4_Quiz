@@ -10,16 +10,16 @@ const colorea = (msg, color) => {
 
 };
 
-const log = (msg, color) => {
-	console.log(colorea(msg, color));
+const log = (socket, msg, color) => {
+	socket.write(colorea(msg, color) + "\n");
 };
 
-const figlog = (msg, color) => {
-	log(figlet.textSync(msg, {horizontalLayout: 'full'}), color);
+const figlog = (socket, msg, color) => {
+	log(socket, figlet.textSync(msg, {horizontalLayout: 'full'}), color);
 };
 
-const errorlog = (emsg) => {
-	console.log(`${colorea("ERROR", 'red')}: ${colorea(colorea(emsg, 'red'), "bgYellowBright")}`);
+const errorlog = (socket, emsg) => {
+	socket.write(`${colorea("ERROR", 'red')}: ${colorea(colorea(emsg, 'red'), "bgYellowBright")}\n`);
 };
 
 exports = module.exports = {

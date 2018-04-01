@@ -1,5 +1,5 @@
 {
-  "name": "p2_quiz",
+  "name": "p4_quiz",
   "version": "1.0.0",
   "description": "",
   "main": "main.js",
@@ -9,18 +9,20 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jsboyer/P2_Quiz.git"
+    "url": "git+https://github.com/jsboyer/P4_Quiz.git"
   },
   "author": "",
   "license": "UNLICENSED",
   "bugs": {
-    "url": "https://github.com/jsboyer/P2_Quiz/issues"
+    "url": "https://github.com/jsboyer/P4_Quiz/issues"
   },
-  "homepage": "https://github.com/jsboyer/P2_Quiz#readme",
+  "homepage": "https://github.com/jsboyer/P4_Quiz#readme",
   "dependencies": {
-    "chalk": "^2.3.1",
+    "chalk": "^2.3.2",
     "figlet": "^1.2.0",
-    "sequelize": "^4.36.0",
+    "net": "^1.0.2",
+    "netcat": "^1.3.3",
+    "sequelize": "^4.37.5",
     "sqlite3": "^3.1.13"
   }
 }
